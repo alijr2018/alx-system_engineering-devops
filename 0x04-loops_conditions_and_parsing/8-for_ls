@@ -5,10 +5,8 @@
 # Where only the part of the name after the first dash is displayed (refer to the example)
 
 
-for file in *
-do
-    if [ -f "$file" ] && [ "${file#*-}" != "$file" ]
-    then
+for file in *; do
+    if [ -f "$file" ] && [ "${file#*-}" != "$file" ]; then
         echo "${file#*-}"
     fi
 done
