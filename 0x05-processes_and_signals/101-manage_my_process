@@ -9,7 +9,7 @@ function start_process {
         exit 1
     fi
 
-    ./manage_my_process.sh &
+    ./manage_my_process &
     pid=$!
     echo "$pid" > /var/run/my_process.pid
     echo "manage_my_process started"
