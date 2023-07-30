@@ -11,15 +11,21 @@ function start_process
 }
 
 function stop_process {
-        pid=$(pgrep -f /var/run/my_process.pid)
+        pid=$(cat /var/run/my_process.pid)
         kill -9 "$pid"
         rm "/var/run/my_process.pid"
         echo "manage_my_process stopped"
 }
 
 function restart_process {
-    stop_process
-    start_process
+    pid=$(cat /var/run/my_process.pid)
+        kill -9 "$pid"
+        rm "/var/run/my_process.pid"
+    
+    ./manage_my_process &
+    pid=$!
+    echo "$pid" > /var/run/my_process.pid
+    
     echo "manage_my_process restarted"
 }
 
