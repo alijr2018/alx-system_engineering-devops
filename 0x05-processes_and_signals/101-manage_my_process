@@ -11,7 +11,7 @@ function start_process
 }
 
 function stop_process {
-        pid=$(cat /var/run/my_process.pid)
+        pid=$(pgrep -f /var/run/my_process.pid)
         kill -9 "$pid"
         rm "/var/run/my_process.pid"
         echo "manage_my_process stopped"
