@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+shh -i ~/.ssh/school ubuntu@387398-web-01 <<EOF
+
+exit 
+
+EOF
