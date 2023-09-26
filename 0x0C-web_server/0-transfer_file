@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#A Bash script that transfers a file from our client to a server.
+#A Bash script that transfers a file from our client to another server.
 
 if [ "$#" -lt 4 ];
 then
