@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# start apache on the container and to return a page containing Hello Holberton when querying the root of it.
+#Start apache on the container and to return a page containing Hello Holberton when querying the root of it.
 
 service apache2 start
 
