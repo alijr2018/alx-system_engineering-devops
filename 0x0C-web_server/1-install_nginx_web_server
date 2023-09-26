@@ -5,8 +5,7 @@ sudo apt-get update -y
 
 sudo apt-get install nginx -y
 
-#echo 'Hello World!' > /var/www/html/index.html
-
 sudo service nginx start
 
-echo "Hello World!" > /var/www/html/index.html
+echo "<html><body>Hello World!</body></html>" | sudo tee /var/www/html/index.html
+
