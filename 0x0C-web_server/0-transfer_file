@@ -8,9 +8,9 @@ then
 fi
 
 FILE_PATH="$1"
-SERVER_IP="$2"
+IP_SERVER="$2"
 SCP="$3"
 SSH_KEY="$4"
 
-scp -o StrictHostKeyChecking=no -i "$SSH_KEY" "$FILE_PATH" "$SCP"@"$SERVER_IP":~/
+scp -o StrictHostKeyChecking=no -i "$SSH_KEY" "$FILE_PATH" "$SCP"@"$IP_SERVER":~/
 
