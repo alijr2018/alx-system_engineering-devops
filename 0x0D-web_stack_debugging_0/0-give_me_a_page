@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Fix my server with these magic 2 lines
-cp /etc/passwd /tmp/
-echo OK > /tmp/isworking
+# start apache on the container and to return a page containing Hello Holberton when querying the root of it.
+
+service apache2 start
