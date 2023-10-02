@@ -34,12 +34,12 @@ frontend main
 
 backend app_servers
     balance roundrobin
-    server web-01 [STUDENT_ID]-web-01:80 check
-    server web-02 [STUDENT_ID]-web-02:80 check
+    server web-01 387398-web-01:80 check
+    server web-02 387398-web-02:80 check
 EOL
 
 sudo systemctl restart haproxy
 
 
-sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-01' >> /etc/hosts"
-sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-02' >> /etc/hosts"
+sudo bash -c "echo '127.0.0.1 387398-web-02' >> /etc/hosts"
+sudo bash -c "echo '127.0.0.1 387398-web-02' >> /etc/hosts"
