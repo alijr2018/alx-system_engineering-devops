@@ -1,12 +1,10 @@
 #!/usr/bin/env bash                                                           
 # Install and configure HAproxy on your lb-01 server.                        
-#!/bin/bash
 
-# Update package list and install HAProxy
 sudo apt-get update
+
 sudo apt-get install -y haproxy
 
-# Configure HAProxy
 sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
 global
     log /dev/log local0
