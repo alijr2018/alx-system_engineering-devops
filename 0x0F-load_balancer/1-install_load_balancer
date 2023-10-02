@@ -38,9 +38,8 @@ backend app_servers
     server web-02 [STUDENT_ID]-web-02:80 check
 EOL
 
-# Restart HAProxy service
 sudo systemctl restart haproxy
 
-# Update hosts file for [STUDENT_ID]-web-01 and [STUDENT_ID]-web-02
+
 sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-01' >> /etc/hosts"
 sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-02' >> /etc/hosts"
