@@ -41,5 +41,5 @@ EOL
 sudo systemctl restart haproxy
 
 
-sudo bash -c "echo '127.0.0.1 387398-web-02' >> /etc/hosts"
-sudo bash -c "echo '127.0.0.1 387398-web-02' >> /etc/hosts"
+sudo bash -c "echo '52.205.94.206 387398-web-02' >> /etc/hosts"
+sudo bash -c "echo '52.86.161.51 387398-web-02' >> /etc/hosts"
