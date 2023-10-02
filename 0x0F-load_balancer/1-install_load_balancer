@@ -1,17 +1,48 @@
 #!/usr/bin/env bash                                                           
 # Install and configure HAproxy on your lb-01 server.                        
+#!/bin/bash
+
+# Update package list and install HAProxy
 sudo apt-get update
+sudo apt-get install -y haproxy
 
-sudo apt-get -y install software-properties-common
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    user haproxy
+    group haproxy
+    maxconn 2000
+    daemon
 
-sudo add-apt-repository -y ppa:vbernat/haproxy-1.8
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    retries 3
+    timeout http-request 10s
+    timeout queue 1m
+    timeout connect 10s
+    timeout client 1m
+    timeout server 1m
+    timeout check 10s
+    maxconn 3000
 
-sudo apt-get -y install haproxy
+frontend main
+    bind *:80
+    default_backend app_servers
 
-options="\n\tbind :80\n\tmode http\n\tuse_backend mybackend\nbackend mybackend\n\tbalance roundrobin\n\tserver 387398-web-01 52.205.94.206:80 check\n\tserver 387398-web-02 52.86.161.51:80 check"
+backend app_servers
+    balance roundrobin
+    server web-01 [STUDENT_ID]-web-01:80 check
+    server web-02 [STUDENT_ID]-web-02:80 check
+EOL
 
-sed -i '/errorfile 504/a frontend myconf' /etc/haproxy/haproxy.cfg
+# Restart HAProxy service
+sudo systemctl restart haproxy
 
-sed -i "s/frontend myconf/&$options/g" /etc/haproxy/haproxy.cfg
-
-sudo service haproxy restart
+# Update hosts file for [STUDENT_ID]-web-01 and [STUDENT_ID]-web-02
+sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-01' >> /etc/hosts"
+sudo bash -c "echo '127.0.0.1 [STUDENT_ID]-web-02' >> /etc/hosts"
