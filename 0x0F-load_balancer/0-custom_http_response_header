@@ -12,7 +12,7 @@ sudo apt-get install nginx -y
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
 
 # Modify Nginx default configuration to include custom header
-sudo sed -i "/server_name _;/a \ \ \ \ add_header X-Served-By $hostname;" /etc/nginx/sites-available/default
+sudo sed -i "s|^\s*server_name\s\+_;$|\0\n\tadd_header X-Served-By $hostname;|" /etc/nginx/sites-available/default
 
 # Restart Nginx to apply the changes
 sudo systemctl restart nginx
