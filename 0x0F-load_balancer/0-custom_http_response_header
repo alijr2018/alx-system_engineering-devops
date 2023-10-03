@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 # configures a brand new Ubuntu machine to the requirements asked in this task.
 
-# Get the hostname
-hostname=$(hostname)
+#!/usr/bin/env bash
 
-# Update package list and install Nginx
-sudo apt-get update -y
-sudo apt-get install nginx -y
+# Update package list and install Nginx on web-01
+ssh ubuntu@52.205.94.206 'sudo apt-get update -y && sudo apt-get install nginx -y'
+ssh ubuntu@52.205.94.206 'echo "Ceci n'"'"'est pas une page" | sudo tee /var/www/html/custom_404.html'
+ssh ubuntu@52.205.94.206 'sudo sed -i "/server_name _;/a \ \ \ \ add_header X-Served-By 387398-web-01;" /etc/nginx/sites-available/default'
+ssh ubuntu@52.205.94.206 'sudo systemctl restart nginx'
 
-# Create a custom 404 error page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
-
-# Modify Nginx default configuration to include custom header
-sudo sed -i "s|^\s*server_name\s\+_;$|\0\n\tadd_header X-Served-By $hostname;|" /etc/nginx/sites-available/default
-
-# Restart Nginx to apply the changes
-sudo systemctl restart nginx
+# Update package list and install Nginx on web-02
+ssh ubuntu@52.86.161.51 'sudo apt-get update -y && sudo apt-get install nginx -y'
+ssh ubuntu@52.86.161.51 'echo "Ceci n'"'"'est pas une page" | sudo tee /var/www/html/custom_404.html'
+ssh ubuntu@52.86.161.51 'sudo sed -i "/server_name _;/a \ \ \ \ add_header X-Served-By 387398-web-02;" /etc/nginx/sites-available/default'
+ssh ubuntu@52.86.161.51 'sudo systemctl restart nginx'
