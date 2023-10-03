@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 # configures a brand new Ubuntu machine to the requirements asked in this task.
 
-var=$(hostname)
-n_s="error_page 404 \/custom_404.html;\n location \/redirect_me {\n return 301 \$scheme:\/\/www.google.com;"
-n_s1="server {\n\tadd_header X-Served-By $var;"
+# Get the hostname
+hostname=$(hostname)
 
-apt-get update -y
-apt-get install nginx -y
-echo "Hello World!" > /usr/share/nginx/html/index.html
-mkdir -p /var/www/html
-echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
-sudo sed -i -E "s/^[^#]+location \/ \{/$n_s/" /etc/nginx/sites-available/default
-sudo sed -i -E "s/^server \{/$n_s1/" /etc/nginx/sites-available/default
-sudo service nginx start
+# Update package list and install Nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# Create a custom 404 error page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
+
+# Modify Nginx default configuration to include custom header
+sudo sed -i "/server_name _;/a \ \ \ \ add_header X-Served-By $hostname;" /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the changes
+sudo systemctl restart nginx
