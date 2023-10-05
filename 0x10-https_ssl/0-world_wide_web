@@ -12,6 +12,8 @@ display_info() {
         subdomains=("www" "lb-01" "web-01" "web-02")
     fi
 
+    local record_type destination
+
     for sub in "${subdomains[@]}"; do
         record_type=$(dig "${sub}.${domain}" +short)
         destination=$(dig "${sub}.${domain}" | grep -A1 'ANSWER SECTION:' | awk '/A/{print $5}')
