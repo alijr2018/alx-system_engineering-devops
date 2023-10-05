@@ -1,0 +1,42 @@
+global
+    maxconn 2000
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend http_front
+    bind *:80
+    mode http
+    option forwardfor
+    redirect scheme https if !{ ssl_fc }
+
+frontend https_front
+    bind *:443 ssl crt /etc/letsencrypt/live/www.your_domain.com/fullchain.pem
+    mode http
+    option forwardfor
+
+    acl is_holberton path -i -m beg /
+    http-response set-header X-Served-By %[srv_id]
+    http-response add-header X-Custom-Header HAProxy
+
+    use_backend holberton_backend if is_holberton
+
+backend holberton_backend
+    mode http
+    balance roundrobin
+    server web-01 web-01.your_domain.com:80 check
+    server web-02 web-02.your_domain.com:80 check
