@@ -1,22 +1,30 @@
 #!/usr/bin/env bash
 #A Bash script that will display information about subdomains.
 
-if [  $# == 2  ]; then
-    var_rec=$(dig $2.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
-    var_ip=$(dig $2.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
-    echo "The subdomain $2 is a $var_rec record and points to $var_ip"
-else
-    var_rec=$(dig www.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
-    var_ip=$(dig www.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
-    echo "The subdomain www is a $var_rec record and points to $var_ip"
-    var_rec=$(dig lb-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
-    var_ip=$(dig lb-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
-    echo "The subdomain lb-01 is a $var_rec record and points to $var_ip"
-    var_rec=$(dig web-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
-    var_ip=$(dig web-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
-    echo "The subdomain web-01 is a $var_rec record and points to $var_ip"
-    var_rec=$(dig web-02.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
-    var_ip=$(dig web-02.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
-    echo "The subdomain web-02 is a $var_rec record and points to $var_ip"
+display_info() {
+    local domain=$1
+    local subdomain=$2
+
+    local subdomains=()
+    if [[ -n "$subdomain" ]]; then
+        subdomains=("$subdomain")
+    else
+        subdomains=("www" "lb-01" "web-01" "web-02")
+    fi
+
+    for sub in "${subdomains[@]}"; do
+        local record_type=$(dig "${sub}.${domain}" +short)
+        local destination=$(dig "${sub}.${domain}" | grep -A1 'ANSWER SECTION:' | awk '/A/{print $5}')
+        echo "The subdomain ${sub} is a ${record_type} record and points to ${destination}"
+    done
+}
+
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+    echo "Usage: $0 <domain> [subdomain]"
+    exit 1
 fi
 
+domain=$1
+subdomain=$2
+
+display_info "$domain" "$subdomain"
