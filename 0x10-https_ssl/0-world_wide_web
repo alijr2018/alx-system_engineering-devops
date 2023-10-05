@@ -17,14 +17,9 @@ display_info() {
     for sub in "${subdomains[@]}"; do
         record_type=$(dig "${sub}.${domain}" +short)
         destination=$(dig "${sub}.${domain}" | grep -A1 'ANSWER SECTION:' | awk '/A/{print $5}')
-        echo "The subdomain ${sub} is a ${record_type} record and points to ${destination}"
+        echo "The subdomain ${sub} is A record and points to ${destination}"
     done
 }
-
-if [[ $# -lt 1 || $# -gt 2 ]]; then
-    echo "Usage: $0 <domain> [subdomain]"
-    exit 1
-fi
 
 domain=$1
 subdomain=$2
