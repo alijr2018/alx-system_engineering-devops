@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 #A Bash script that will display information about subdomains.
 
-info () {
-    if [ "${#}" -eq 2 ]; then
-	www="$(dig "${2}.${1}" | awk "/A\t[0-9]/" | tr "\t " "~" | cut -d "~" -f 5-11)"
-	echo "The subdomain ${2} is a A record and points to ${www}"
-    elif [ "${#}" -eq 1 ]; then
-	www="$(dig "www.${1}" | awk "/A\t[0-9]/" | tr "\t " "~" | cut -d "~" -f 5-11)"
-	lb="$(dig "lb-01.${1}" | awk "/A\t[0-9]/" | tr "\t " "~" | cut -d "~" -f 5-11)"
-	w1="$(dig "web-01.${1}" | awk "/A\t[0-9]/" | tr "\t " "~" | cut -d "~" -f 5-11)"
-	w2="$(dig "web-02.${1}" | awk "/A\t[0-9]/" | tr "\t " "~" | cut -d "~" -f 5-11)"
-	echo "The subdomain www is a A record and points to ${www}"
-	echo "The subdomain lb-01 is a A record and points to ${lb}"
-	echo "The subdomain web-01 is a A record and points to ${w1}"
-	echo "The subdomain web-02 is a A record and points to ${w2}"
-    fi
-}
-
-info $1 $2
+if [  $# == 2  ]; then
+    var_rec=$(dig $2.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
+    var_ip=$(dig $2.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
+    echo "The subdomain $2 is a $var_rec record and points to $var_ip"
+else
+    var_rec=$(dig www.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
+    var_ip=$(dig www.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
+    echo "The subdomain www is a $var_rec record and points to $var_ip"
+    var_rec=$(dig lb-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
+    var_ip=$(dig lb-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
+    echo "The subdomain lb-01 is a $var_rec record and points to $var_ip"
+    var_rec=$(dig web-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
+    var_ip=$(dig web-01.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
+    echo "The subdomain web-01 is a $var_rec record and points to $var_ip"
+    var_rec=$(dig web-02.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $4}' | sed '/./,$!d')
+    var_ip=$(dig web-02.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
+    echo "The subdomain web-02 is a $var_rec record and points to $var_ip"
+fi
