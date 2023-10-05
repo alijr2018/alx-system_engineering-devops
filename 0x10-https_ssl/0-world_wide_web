@@ -19,3 +19,4 @@ else
     var_ip=$(dig web-02.$1 | grep -A1 'ANSWER SECTION:' | awk '{print $5}' | sed '/./,$!d')
     echo "The subdomain web-02 is a $var_rec record and points to $var_ip"
 fi
+
