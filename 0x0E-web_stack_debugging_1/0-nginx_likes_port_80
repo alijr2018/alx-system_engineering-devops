@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 # A Bash script with the minimum number of commands to automate your fix.
 
-service nginx start
+sed -i "s/listen 8080 default_server;/listen 80 default_server;/" /etc/nginx/sites-enabled/default
 
-nginx_status=$(curl -s -o /dev/null -w "%{http_code}" 0:80)
+sed -i "s/listen \[::\]:8080 default_server ipv6only=on;/listen \[::\]:80 default_server;/" /etc/nginx/sites-enabled/default
 
-if [[ $nginx_status == 200 ]]; then
-    echo "Nginx is already listening on port 80."
-else
-    echo "Configuring Nginx to listen on port 80..."
-    sed -i '/listen 80 default_server;/c\    listen 80;' /etc/nginx/sites-available/default
-    service nginx restart
-    echo "Nginx is now listening on port 80."
-fi
+sed -i "s/ ipv6only=on//" /etc/nginx/sites-available/default
+
+service nginx restart
 
