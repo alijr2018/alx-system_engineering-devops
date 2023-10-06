@@ -2,23 +2,24 @@
 # A Bash script that will display information about subdomains and write it to a file.
 
 display_info() {
-    local domain=$1
-    local subdomain=$2
+local domain=$1
+local subdomain=$2
 
-    local subdomains=()
-    if [[ -n "$subdomain" ]]; then
-        subdomains=("$subdomain")
-    else
-        subdomains=("www" "lb-01" "web-01" "web-02")
-    fi
+local subdomains=()
+if [[ -n "$subdomain" ]]; then
+	subdomains=("$subdomain")
+else
+	subdomains=("www" "lb-01" "web-01" "web-02")
+fi
 
-    for sub in "${subdomains[@]}"; do
-        destination=$(dig "${sub}.${domain}" | grep -A1 'ANSWER SECTION:' | awk '/A/{print $5}' | tr -d '\n')
-        echo "The subdomain ${sub} is a A record and points to ${destination}"
-    done
+for sub in "${subdomains[@]}"; do
+	destination=$(dig "${sub}.${domain}" | grep -A1 'ANSWER SECTION:' | awk '/A/{print $5}' | tr -d '\n')
+echo "The subdomain ${sub} is a A record and points to ${destination}"
+done
 }
 
 domain=$1
 subdomain=$2
 
 display_info "$domain" "$subdomain"
+
