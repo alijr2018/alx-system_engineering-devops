@@ -18,7 +18,7 @@ defaults
     timeout server 50000
 
 frontend www-frontend
-    bind *:443 ssl crt /etc/letsencrypt/live/www.example.com/fullchain.pem
+    bind *:443 ssl crt /etc/letsencrypt/live/alialx.tech/fullchain.pem
     default_backend www-backend
 
 backend www-backend
