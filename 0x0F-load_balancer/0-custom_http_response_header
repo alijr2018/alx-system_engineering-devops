@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 # configures a brand new Ubuntu machine to the requirements asked in this task.
 
-sudo apt update
+sudo apt-get update
 
-sudo apt install nginx -y
+sudo apt-get install nginx -y
 
-echo 'add_header X-Served-By $hostname;' | sudo tee -a /etc/nginx/sites-available/default > /dev/null
+sudo ufw allow 'Nginx HTTP'
 
-sudo systemctl restart nginx
+echo "Hello World!" > /var/www/html/index.html
+
+sed -i '/listen 80 default_server;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+
+service nginx start
+
