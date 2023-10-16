@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 # Bash script that configures the container to fit the above requirements.
 
+sed -i 's/user .*;/user nginx;/' /etc/nginx/nginx.conf
 
+sed -i '/listen [::]:80;/a \    listen [::]:8080;' /etc/nginx/sites-available/default
+
+service nginx restart
+
+ps auxff | grep ngin[x]
+nc -z 0 8080
