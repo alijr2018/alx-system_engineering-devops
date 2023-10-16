@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Bash script that configures the container to fit the above requirements.
 
-sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
+sed -i "s/#user www-data/user nginx/" /etc/nginx/nginx.conf
 
-sed -i '/listen [::]:80;/a \    listen [::]:8080;' /etc/nginx/sites-available/default
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
 
-service nginx restart
+chmod 644 /etc/nginx/nginx.conf
 
-ps auxff | grep "nginx"
-nc -z 0 8080
+pkill apache2
+
+sudo -u nginx service nginx start
