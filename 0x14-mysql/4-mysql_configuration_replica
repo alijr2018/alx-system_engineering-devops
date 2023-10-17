@@ -2,6 +2,7 @@
 bind-address = 127.0.0.1
 
 server-id = 2
-relay-log = /var/log/mysql/mysql-relay-bin.log
+relay_log = /var/log/mysql/mysql-relay-bin.log
 log_bin = /var/log/mysql/mysql-bin.log
 binlog_do_db = tyrell_corp
+replicate-do-db = tyrell_corp
