@@ -7,7 +7,7 @@ dump_file="backup.sql"
 
 mkdir -p "$backup_dir"
 
-mysqldump -u root -p"$password" --all-databases > "$backup_dir/$dump_file"
+mysqldump -u root -p$password --all-databases > "$backup_dir/$dump_file"
 
 current_date=$(date +"%d-%m-%Y")
 
