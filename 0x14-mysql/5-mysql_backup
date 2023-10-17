@@ -7,8 +7,8 @@ dump_file="backup.sql"
 
 mkdir -p "$backup_dir"
 
-mysqldump -u root -p$password --all-databases > "$backup_dir/$dump_file"
+mysqldump -u root -p$password --all-databases > backup.sql
 
 current_date=$(date +"%d-%m-%Y")
 
-tar -czf "$current_date.tar.gz" -C "$backup_dir" "$dump_file"
+tar -czf "$current_date.tar.gz" -C backup.sql
