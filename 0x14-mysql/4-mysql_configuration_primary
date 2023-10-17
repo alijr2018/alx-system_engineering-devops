@@ -1,5 +1,5 @@
 [mysqld]
-bind-address = 100.27.3.3
+bind-address = 127.0.0.1
 
 server-id = 1
 log_bin = /var/log/mysql/mysql-bin.log
