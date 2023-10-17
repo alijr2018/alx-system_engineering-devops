@@ -11,4 +11,4 @@ mysqldump -u root -p$password --all-databases > backup.sql
 
 current_date=$(date +"%d-%m-%Y")
 
-tar -czf "$current_date.tar.gz" -C backup.sql
+tar -czf "$current_date.tar.gz" -C "$backup_dir" "$dump_file"
