@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Python script to export data in the CSV format. """
 import requests
-import sys
 import csv
+import sys
 
 
 def get_employee_todo_progress(employee_id):
@@ -20,20 +20,21 @@ def get_employee_todo_progress(employee_id):
         employee_id = user_data.get('id')
         employee_name = user_data.get('name')
 
-        # Define the CSV file name
-        csv_file_name = f"{employee_id}.csv"
-
-        with open(csv_file_name, 'w', newline='') as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+        # Create and write the CSV file
+        csv_filename = f"{employee_id}.csv"
+        with open(csv_filename, mode='w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([
+                "USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"
+            ])
 
             for task in todo_data:
-                task_id = task['id']
-                task_title = task['title']
-                task_completed = task['completed']
-                csv_writer.writerow([employee_id, employee_name, task_completed, task_title])
+                task_completed = "True" if task['completed'] else "False"
+                csv_writer.writerow([
+                    employee_id, employee_name, task_completed, task['title']
+                ])
 
-        print(f"Data exported to {csv_file_name}")
+        print(f"Data exported to {csv_filename}")
 
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
