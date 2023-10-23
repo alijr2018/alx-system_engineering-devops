@@ -15,7 +15,8 @@ if __name__ == '__main__':
             f_request = requests.get(x).json()
             request = requests.get('{}/todos'.format(REST_API)).json()
             name = f_request.get('name')
-            task_request = list(filter(lambda x: x.get('userId') == input, request))
+            y = filter(lambda x: x.get('userId'))
+            task_request = list((y) == input, request)
             c_tasks = list(filter(lambda x: x.get('completed'), task_request))
             print(
                 'Employee {} is done with tasks({}/{}):'.format(
