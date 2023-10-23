@@ -11,18 +11,18 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if re.fullmatch(r'\d+', sys.argv[1]):
             input = int(sys.argv[1])
-            emp_req = requests.get('{}/users/{}'.format(REST_API, input)).json()
-            task_req = requests.get('{}/todos'.format(REST_API)).json()
-            emp_name = emp_req.get('name')
-            tasks = list(filter(lambda x: x.get('userId') == input, task_req))
-            completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
+            first_request = requests.get('{}/users/{}'.format(REST_API, input)).json()
+            request = requests.get('{}/todos'.format(REST_API)).json()
+            name = first_request.get('name')
+            list_emp = list(filter(lambda x: x.get('userId') == input, request))
+            list_task = list(filter(lambda x: x.get('completed'), list_emp))
             print(
-                'Employee {} is done with tasks({}/{}):'.format(
-                    emp_name,
-                    len(completed_tasks),
-                    len(tasks)
+                'Employee {} is done with list_emp({}/{}):'.format(
+                    name,
+                    len(list_task),
+                    len(list_emp)
                 )
             )
-            if len(completed_tasks) > 0:
-                for task in completed_tasks:
+            if len(list_task) > 0:
+                for task in list_task:
                     print('\t {}'.format(task.get('title')))
