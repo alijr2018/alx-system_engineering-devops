@@ -20,7 +20,6 @@ def get_employee_todo_progress(employee_id):
         employee_id = user_data.get('id')
         employee_name = user_data.get('name')
 
-        # Create and write the CSV file
         csv_filename = f"{employee_id}.csv"
         with open(csv_filename, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_MINIMAL)
