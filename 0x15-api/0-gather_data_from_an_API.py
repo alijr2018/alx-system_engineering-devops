@@ -1,31 +1,28 @@
 #!/usr/bin/python3
 """a Python script that, using this REST API, for a given employee
 ID, returns information about his/her TODO list progress."""
-
+import re
 import requests
 import sys
 
-users_url = "https://jsonplaceholder.typicode.com/users"
-todos_url = "https://jsonplaceholder.typicode.com/todos"
+REST_API = "https://jsonplaceholder.typicode.com"
 
-def check_tasks(filename):
-    """ Fetch user name, number of tasks """
-
-    resp = requests.get(todos_url).json()
-
-    count = 0
-    with open(filename, 'r') as f:
-        next(f)  # Skip the first line
-        for line in f:
-            count += 1
-            if line.startswith('\t '):
-                print(f"Task {count} Formatting: OK")
-            else:
-                print(f"Task {count} Formatting: Incorrect")
-
-if __name__ == "__main":
-    if len(sys.argv) != 2:
-        print("Usage: python3 main.py <student_output_file>")
-        sys.exit(1)
-
-    check_tasks(sys.argv[1])
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            input = int(sys.argv[1])
+            emp_req = requests.get('{}/users/{}'.format(REST_API, input)).json()
+            task_req = requests.get('{}/todos'.format(REST_API)).json()
+            emp_name = emp_req.get('name')
+            tasks = list(filter(lambda x: x.get('userId') == input, task_req))
+            completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
+            print(
+                'Employee {} is done with tasks({}/{}):'.format(
+                    emp_name,
+                    len(completed_tasks),
+                    len(tasks)
+                )
+            )
+            if len(completed_tasks) > 0:
+                for task in completed_tasks:
+                    print('\t {}'.format(task.get('title')))
