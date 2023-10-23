@@ -15,14 +15,14 @@ if __name__ == '__main__':
             request = requests.get('{}/todos'.format(REST_API)).json()
             name = first_request.get('name')
             list_emp = list(filter(lambda x: x.get('userId') == input, request))
-            list_task = list(filter(lambda x: x.get('completed'), list_emp))
+            completed_tasks = list(filter(lambda x: x.get('completed'), list_emp))
             print(
                 'Employee {} is done with list_emp({}/{}):'.format(
                     name,
-                    len(list_task),
-                    len(list_emp)
+                    len(completed_tasks),
+                    len(tasks)
                 )
             )
-            if len(list_task) > 0:
-                for task in list_task:
+            if len(completed_tasks) > 0:
+                for task in completed_tasks:
                     print('\t {}'.format(task.get('title')))
