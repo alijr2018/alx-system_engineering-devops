@@ -11,9 +11,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if re.fullmatch(r'\d+', sys.argv[1]):
             input = int(sys.argv[1])
-            first_request = requests.get('{}/users/{}'.format(REST_API, input)).json()
+            f_request = requests.get('{}/users/{}'.format(REST_API, input)).json()
             request = requests.get('{}/todos'.format(REST_API)).json()
-            name = first_request.get('name')
+            name = f_request.get('name')
             tasks = list(filter(lambda x: x.get('userId') == input, request))
             c_tasks = list(filter(lambda x: x.get('completed'), tasks))
             print(
