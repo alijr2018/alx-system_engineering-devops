@@ -16,7 +16,6 @@ if __name__ == '__main__':
             emp_name = emp_req.get('name')
             tasks = [task for task in task_req if task.get('userId') == id]
             completed_tasks = [task for task in tasks if task.get('completed')]
-            print(f"Employee {emp_name} is done with tasks"
-                  f"({len(completed_tasks)}/{len(tasks)}):")
+            print(f'Employee {emp_name} is done with tasks({len(completed_tasks)}/{len(tasks)}):')
             for task in completed_tasks:
                 print(f'\t{task.get("title")}')
