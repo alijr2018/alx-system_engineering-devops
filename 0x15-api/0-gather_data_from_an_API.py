@@ -13,12 +13,12 @@ if __name__ == '__main__':
             input = int(sys.argv[1])
             first_request = requests.get('{}/users/{}'.format(REST_API, input)).json()
             request = requests.get('{}/todos'.format(REST_API)).json()
-            name = first_request.get('name')
-            list_emp = list(filter(lambda x: x.get('userId') == input, request))
-            completed_tasks = list(filter(lambda x: x.get('completed'), list_emp))
+            emp_name = first_request.get('name')
+            tasks = list(filter(lambda x: x.get('userId') == input, request))
+            completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
             print(
-                'Employee {} is done with list_emp({}/{}):'.format(
-                    name,
+                'Employee {} is done with tasks({}/{}):'.format(
+                    emp_name,
                     len(completed_tasks),
                     len(tasks)
                 )
