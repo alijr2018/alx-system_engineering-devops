@@ -1,41 +1,22 @@
 #!/usr/bin/python3
 """a Python script that, using this REST API, for a given employee
 ID, returns information about his/her TODO list progress."""
+import re
 import requests
 import sys
 
+REST_API = "https://jsonplaceholder.typicode.com"
 
-def get_employee_todo_progress(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{employee_id}"
-    todo_url = f"{base_url}/todos?userId={employee_id}"
-
-    try:
-        user_response = requests.get(user_url)
-        todo_response = requests.get(todo_url)
-
-        user_data = user_response.json()
-        todo_data = todo_response.json()
-
-        employee_name = user_data.get('name')
-        total_tasks = len(todo_data)
-        done_tasks = len([task for task in todo_data if task['completed']])
-
-        print(f"Employee {employee_name} is done with tasks"
-              f"({done_tasks}/{total_tasks}):")
-        for task in todo_data:
-            if task['completed']:
-                print(f"\t{task['title']}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            id = int(sys.argv[1])
+            emp_req = requests.get(f'{REST_API}/users/{id}').json()
+            task_req = requests.get(f'{REST_API}/todos').json()
+            emp_name = emp_req.get('name')
+            tasks = [task for task in task_req if task.get('userId') == id]
+            completed_tasks = [task for task in tasks if task.get('completed')]
+            print(f"Employee {emp_name} is done with tasks"
+                  f"({len(completed_tasks)}/{len(tasks)}):")
+            for task in completed_tasks:
+                print(f'\t{task.get("title")}')
