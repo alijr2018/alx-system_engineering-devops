@@ -2,52 +2,30 @@
 """ Python script to export data in the JSON format. """
 import json
 import requests
-import sys
+from sys import argv
 
+url_todo = 'https://jsonplaceholder.typicode.com/todos/'
+url_user = 'https://jsonplaceholder.typicode.com/users/'
 
-def get_employee_todo_progress(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{employee_id}"
-    todo_url = f"{base_url}/todos?userId={employee_id}"
+if __name__ == '__main':
+    employee_id = argv[1]
+    todo = requests.get(url_todo, params={'userId': employee_id})
+    user = requests.get(url_user, params={'id': employee_id})
 
-    try:
-        user_response = requests.get(user_url)
-        todo_response = requests.get(todo_url)
+    todo_dict_list = todo.json()
+    user_dict_list = user.json()
+    user_tasks = {}
+    employee = user_dict_list[0].get('username')
 
-        user_data = user_response.json()
-        todo_data = todo_response.json()
+    for task in todo_dict_list:
+        status = task.get('completed')
+        title = task.get('title')
+        task_dict = {}
+        task_dict['task'] = title
+        task_dict['completed'] = status
+        task_dict['username'] = employee
+        user_tasks[employee_id] = user_tasks.get(employee_id, [])
+        user_tasks[employee_id].append(task_dict)
 
-        employee_id = user_data.get('id')
-        employee_name = user_data.get('name')
-
-        # Create a dictionary with the required format
-        data = {
-            employee_id: [
-                {
-                    "task": task['title'],
-                    "completed": task['completed'],
-                    "username": employee_name
-                }
-                for task in todo_data
-            ]
-        }
-
-        # Create and write the JSON file
-        json_filename = f"{employee_id}.json"
-        with open(json_filename, 'w') as json_file:
-            json.dump(data, json_file, indent=4)
-
-        print(f"Data exported to {json_filename}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 export_to_JSON.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
+    with open("{}.json".format(employee_id), "w+") as jsonfile:
+        json.dump(user_tasks, jsonfile, indent=4)
