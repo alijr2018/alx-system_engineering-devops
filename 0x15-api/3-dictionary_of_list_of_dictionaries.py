@@ -4,11 +4,12 @@ import csv
 import json
 import requests
 
+url_todo = 'https://jsonplaceholder.typicode.com/todos/'
+url_user = 'https://jsonplaceholder.typicode.com/users/'
+
 if __name__ == '__main__':
     employee_id = 1
     user_tasks = {}
-    url_todo = 'https://jsonplaceholder.typicode.com/todos/'
-    url_user = 'https://jsonplaceholder.typicode.com/users/'
     users = requests.get(url_user).json()
 
     for employee_id in range(1, len(users) + 1):
