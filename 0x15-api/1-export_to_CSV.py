@@ -1,48 +1,35 @@
 #!/usr/bin/python3
 """ Python script to export data in the CSV format. """
 import csv
-import re
 import requests
 import sys
 
-REST_API = "https://jsonplaceholder.typicode.com"
+users_url = "https://jsonplaceholder.typicode.com/users?id="
+todos_url = "https://jsonplaceholder.typicode.com/todos"
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if re.fullmatch(r'\d+', sys.argv[1]):
-            employee_id = int(sys.argv[1])
-            user_url = '{}/users/{}'.format(REST_API, employee_id)
-            user_response = requests.get(user_url)
 
-            if user_response.status_code == 200:
-                user_data = user_response.json()
-                username = user_data.get('username')
-                tasks_url = '{}/todos?userId={}'.format(REST_API, employee_id)
-                tasks_response = requests.get(tasks_url)
+def user_info(id):
+    total_tasks = 0
+    response = requests.get(todos_url).json()
+    for i in response:
+        if i['userId'] == id:
+            total_tasks += 1
 
-                if tasks_response.status_code == 200:
-                    tasks_data = tasks_response.json()
-                    csv_filename = '{}.csv'.format(employee_id)
+    csv_filename = f"{id}.csv"
+    num_lines = 0
 
-                    with open(csv_filename, mode='w', newline='') as csv_file:
-                        csv_writer = csv.writer(csv_file)
-                        csv_writer.writerow([
-                            "USER_ID",
-                            "USERNAME",
-                            "TASK_COMPLETED_STATUS",
-                            "TASK_TITLE"
-                            ])
+    with open(csv_filename, 'r') as f:
+        csv_reader = csv.reader(f)
+        # Skip the header row
+        next(csv_reader)
+        for _ in csv_reader:
+            num_lines += 1
 
-                        for task in tasks_data:
-                            task_completed = task.get('completed')
-                            task_title = task.get('title')
-                            csv_writer.writerow([
-                                employee_id,
-                                username,
-                                task_completed,
-                                task_title
-                                ])
-        else:
-            pass
+    if total_tasks == num_lines:
+        print(f"Number of tasks in CSV: OK ({num_lines}/{total_tasks})")
     else:
-        pass
+        print(f"Number of tasks in CSV: Incorrect ({num_lines}/{total_tasks})")
+
+
+if __name__ == "__main__":
+    user_info(int(sys.argv[1]))
