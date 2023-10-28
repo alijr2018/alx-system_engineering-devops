@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Python script to export data in the CSV format. """
+import csv
 import re
 import requests
-import csv
 import sys
 
 REST_API = "https://jsonplaceholder.typicode.com"
