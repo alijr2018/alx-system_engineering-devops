@@ -2,34 +2,31 @@
 """ Python script to export data in the CSV format. """
 import csv
 import requests
-import sys
+from sys import argv
 
-users_url = "https://jsonplaceholder.typicode.com/users?id="
-todos_url = "https://jsonplaceholder.typicode.com/todos"
+url_todo = 'https://jsonplaceholder.typicode.com/todos/'
+url_user = 'https://jsonplaceholder.typicode.com/users/'
 
+if __name__ == '__main__':
+    employee_id = argv[1]
+    todo = requests.get(url_todo, params={'userId': employee_id})
+    user = requests.get(url_user, params={'id': employee_id})
 
-def user_info(id):
-    total_tasks = 0
-    response = requests.get(todos_url).json()
-    for i in response:
-        if i['userId'] == id:
-            total_tasks += 1
+    todo_dict_list = todo.json()
+    user_dict_list = user.json()
 
-    csv_filename = f"{id}.csv"
-    num_lines = 0
+    employee = user_dict_list[0].get('username')
 
-    with open(csv_filename, 'r') as f:
-        csv_reader = csv.reader(f)
-        # Skip the header row
-        next(csv_reader)
-        for _ in csv_reader:
-            num_lines += 1
+    with open("{}.csv".format(employee_id), "a+", newline="") as csvfile:
+        csvwriter = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        rows = []
 
-    if total_tasks == num_lines:
-        print(f"Number of tasks in CSV: OK ({num_lines}/{total_tasks})")
-    else:
-        print(f"Number of tasks in CSV: Incorrect ({num_lines}/{total_tasks})")
+        for task in todo_dict_list:
+            status = task['completed']
+            title = task['title']
+            rows.append(["{}".format(employee_id),
+                         "{}".format(employee),
+                         "{}".format(status),
+                         "{}".format(title)])
 
-
-if __name__ == "__main__":
-    user_info(int(sys.argv[1]))
+        csvwriter.writerows(rows)
