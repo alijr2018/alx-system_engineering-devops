@@ -1,6 +1,8 @@
+#!/usr/bin/python3
 import requests
 import json
 import sys
+
 
 def get_employee_todo_progress(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
@@ -33,12 +35,13 @@ def get_employee_todo_progress(employee_id):
         json_filename = f"{employee_id}.json"
         with open(json_filename, 'w') as json_file:
             json.dump(data, json_file, indent=4)
-        
+
         print(f"Data exported to {json_filename}")
 
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
