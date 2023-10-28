@@ -26,12 +26,22 @@ if __name__ == '__main__':
 
                     with open(csv_filename, mode='w', newline='') as csv_file:
                         csv_writer = csv.writer(csv_file)
-                        csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+                        csv_writer.writerow([
+                            "USER_ID",
+                            "USERNAME",
+                            "TASK_COMPLETED_STATUS",
+                            "TASK_TITLE"
+                            ])
 
                         for task in tasks_data:
                             task_completed = task.get('completed')
                             task_title = task.get('title')
-                            csv_writer.writerow([employee_id, username, task_completed, task_title])
+                            csv_writer.writerow([
+                                employee_id,
+                                username,
+                                task_completed,
+                                task_title
+                                ])
         else:
             pass
     else:
