@@ -1,18 +1,3 @@
-# A benchmark for web server setup featuring Nginx is doing under pressure 
-
-package { 'nginx':
-  ensure => installed,
-}
-
-file { '/etc/nginx/nginx.conf':
-  ensure  => file,
-  content => template('nginx/nginx.conf.erb'),
-  require => Package['nginx'],
-  notify  => Service['nginx'],
-}
-
-service { 'nginx':
-  ensure  => running,
-  enable  => true,
-  require => Package['nginx'],
-}
+# test
+exec { '/usr/bin/env sed -i s/15/1000/ /etc/default/nginx': }
+-> exec { '/usr/bin/env service nginx restart': }
