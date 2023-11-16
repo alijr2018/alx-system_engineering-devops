@@ -7,14 +7,12 @@ package { 'nginx':
 file { '/etc/nginx/nginx.conf':
   ensure  => file,
   content => template('nginx/nginx.conf.erb'),
+  require => Package['nginx'],
   notify  => Service['nginx'],
 }
 
 service { 'nginx':
-  ensure    => running,
-  enable    => true,
-  hasstatus => true,
-  hasrestart=> true,
-  require   => Package['nginx'],
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
 }
-class { 'nginx_config': }
