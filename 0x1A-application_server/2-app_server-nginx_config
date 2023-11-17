@@ -1,5 +1,4 @@
-http {
-  server {
+server {
     # Listen on port 80
     listen      80 default_server;
     listen      [::]:80 default_server ipv6only=on;
@@ -21,5 +20,4 @@ http {
         root /var/www/html;
         internal;
     }
-}
 }
