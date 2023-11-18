@@ -17,8 +17,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # Optional trailing slash to preserve original request
-        # proxy_redirect off;
     }
 
     error_log /var/log/nginx/airbnb-error.log;
